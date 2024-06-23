@@ -24,7 +24,7 @@ app.use(cors({
 app.options('*', cors()); // Enable preflight requests for all routes
 
 // Connect to MongoDB
-mongoose.connect(mongoURI, {
+mongoose.connect("mongodb+srv://basantkumarweb:gVLbGoBQUdMThPdn@data.hi1kuqj.mongodb.net/?retryWrites=true&w=majority&appName=Data", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
