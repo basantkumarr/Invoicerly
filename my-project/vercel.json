@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "main.js",
+      "use": "@vercel/static-build",
+      "config": {
+        "environment": {
+          "VITE_CLERK_PUBLISHABLE_KEY": "YOUR_PUBLISHABLE_KEY_HERE"
+        }
+      }
+    }
+  ]
+}
