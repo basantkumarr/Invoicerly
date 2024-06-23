@@ -32,7 +32,7 @@ const Invcreate = () => {
 
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/invoices/${id}`)
+    axios.get(`https://invoicerly-server.vercel.app/invoices/${id}`)
       .then(response => {
         setInvoice(response.data);
       })
