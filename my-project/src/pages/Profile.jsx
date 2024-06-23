@@ -7,6 +7,7 @@ const Profile = () => {
   const [userinfo, setUser] = useState({});
   const { user } = useUser();
   const email = user?.primaryEmailAddress?.emailAddress;
+axios.defaults.withCredentials = true;
 
   useEffect(() => {
     if (email) {
