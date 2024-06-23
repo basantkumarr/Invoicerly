@@ -12,7 +12,13 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+ app.use(cors({
+  origin: "https://invoicerly.vercel.app",
+  optionsSuccessStatus: 200,
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+  credentials: true,
+  preflightContinue: false,
+}));
 
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3001;
