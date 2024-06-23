@@ -5,7 +5,7 @@ import './App.css';
 
 import { ClerkProvider } from '@clerk/clerk-react';
 
-const PUBLISHABLE_KEY ='pk_test_cHJlcGFyZWQtZm94LTAuY2xlcmsuYWNjb3VudHMuZGV2JA';
+const PUBLISHABLE_KEY = 'pk_test_cHJlcGFyZWQtZm94LTAuY2xlcmsuYWNjb3VudHMuZGV2JA';
 
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
@@ -13,7 +13,7 @@ if (!PUBLISHABLE_KEY) {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ClerkProvider frontendAPI={PUBLISHABLE_KEY}>
+    <ClerkProvider frontendApi={PUBLISHABLE_KEY}> {/* Correct prop name is frontendApi */}
       <App />
     </ClerkProvider>
   </React.StrictMode>
