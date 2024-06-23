@@ -17,7 +17,7 @@ const EditUser = () => {
   });
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/users/${id}`)
+    axios.get(`https://invoicerly-server.vercel.app/users/${id}`)
       .then(response => {
         console.log('Fetched user data:', response.data); // Log the fetched data
         setUserData(response.data); // Assuming response.data is the user object
@@ -39,7 +39,7 @@ const EditUser = () => {
     e.preventDefault();
     console.log('Updating user with data:', userData); // Log the data being sent for update
 
-    axios.put(`http://localhost:3001/users/${id}`, userData, {
+    axios.put(`https://invoicerly-server.vercel.app/users/${id}`, userData, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
