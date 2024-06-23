@@ -12,7 +12,7 @@ const Quotation = () => {
 
   useEffect(() => {
     if (email) {
-      axios.post('http://localhost:3001/quotdata', { email })
+      axios.post('https://invoicerly-server.vercel.app/quotdata', { email })
         .then(response => {
           console.log('Invoice data:', response.data);
           setInv(response.data);
