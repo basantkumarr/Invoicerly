@@ -10,7 +10,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/check", { email })
+      .post("https://invoicerly-server.vercel.app/check", { email })
       .then((result) => {
         setUser(result.data.data);
       })
