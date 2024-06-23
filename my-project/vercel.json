@@ -2,13 +2,13 @@
   "version": 2,
   "builds": [
     {
-      "src": "public/index.html",  // Adjust the path based on your project structure
+      "src": "public/index.html",  
       "use": "@vercel/static-build"
     }
   ],
   "routes": [
     {
-      "src": "/(favicon.ico|images|static)/",  // Adjust to match paths that should bypass the fallback
+      "src": "/(favicon.ico|images|static)/",   
       "headers": { "Cache-Control": "max-age=31536000, immutable" },
       "continue": true
     },
