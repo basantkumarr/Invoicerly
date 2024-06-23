@@ -2,8 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const bcrypt = require('bcrypt');
-const { body, validationResult } = require('express-validator');
 const InvoiceModel = require('./models/Invoice');
 const QuotationModel = require('./models/Quotation');
 const UserModel = require('./models/User');
@@ -37,13 +35,10 @@ mongoose.connect(mongoURI, {
   process.exit(1); // Exit the process with an error code
 });
 
-// Middleware for input validation errors
-const validate = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  next();
+// Middleware for basic input validation
+const validateEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase());
 };
 
 // Routes
@@ -78,10 +73,11 @@ app.get('/quotations/:id', async (req, res, next) => {
   }
 });
 
-app.post('/invdata', [
-  body('email').isEmail().normalizeEmail()
-], validate, async (req, res, next) => {
+app.post('/invdata', async (req, res, next) => {
   const { email } = req.body;
+  if (!validateEmail(email)) {
+    return res.status(400).json({ error: "Invalid email address" });
+  }
   try {
     const invoices = await InvoiceModel.find({ email });
     res.json(invoices);
@@ -90,10 +86,11 @@ app.post('/invdata', [
   }
 });
 
-app.post('/quotdata', [
-  body('email').isEmail().normalizeEmail()
-], validate, async (req, res, next) => {
+app.post('/quotdata', async (req, res, next) => {
   const { email } = req.body;
+  if (!validateEmail(email)) {
+    return res.status(400).json({ error: "Invalid email address" });
+  }
   try {
     const quotations = await QuotationModel.find({ email });
     res.json(quotations);
@@ -142,8 +139,8 @@ app.post('/login', async (req, res, next) => {
   try {
     const user = await RegisterModel.findOne({ email });
     if (user) {
-      const passwordMatch = await bcrypt.compare(password, user.password);
-      if (passwordMatch) {
+      // Placeholder for password verification logic
+      if (password === user.password) {
         res.json({ status: "success", message: "Login successful" });
       } else {
         res.status(400).json({ error: "Incorrect password" });
