@@ -2,13 +2,22 @@
   "version": 2,
   "builds": [
     {
-      "src": "main.js",
-      "use": "@vercel/static-build",
-      "config": {
-        "environment": {
-          "VITE_CLERK_PUBLISHABLE_KEY": "pk_test_cHJlcGFyZWQtZm94LTAuY2xlcmsuYWNjb3VudHMuZGV2JA"
-        }
-      }
+      "src": "public/index.html",  // Adjust the path based on your project structure
+      "use": "@vercel/static-build"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(favicon.ico|images|static)/",  // Adjust to match paths that should bypass the fallback
+      "headers": { "Cache-Control": "max-age=31536000, immutable" },
+      "continue": true
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "public/index.html"
     }
   ]
 }
