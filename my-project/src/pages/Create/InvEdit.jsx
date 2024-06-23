@@ -54,7 +54,7 @@ const navigate=useNavigate();
       return;
     }
     
-  axios.post(`http://localhost:3001/invoices`,{
+  axios.post(`invoicerly-server.vercel.app/invoices`,{
     email,
     srNo,
     date,
