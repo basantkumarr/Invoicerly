@@ -10,6 +10,7 @@ const QuotEdit = () => {
   const navigate = useNavigate();
 
   const [userinfo, setUser] = useState([]);
+axios.defaults.withCredentials = true;
 
   useEffect(() => {
     axios.post(`https://invoicerly-server.vercel.app/check`, { email })
@@ -57,6 +58,7 @@ const QuotEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+axios.defaults.withCredentials = true;
 
     if (!srNo || !date || !lastDate || !billedToCompanyName || !address) {
       alert("Please fill in all required fields.");
