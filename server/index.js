@@ -23,16 +23,6 @@ app.use(cors({
   credentials: true,
 }));
 
-
-
-app.use(function (req, res, next) {
-    //Enabling COR
-    res.header("Access-Control-Allow-Origin", "https://invoicerly.vercel.app");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
-    next();
-});
-
 // CORS preflight middleware
 app.options('*', cors()); // Enable preflight requests for all routes
 
@@ -42,7 +32,10 @@ mongoose.connect(mongoURI, {
   useUnifiedTopology: true,
 })
 .then(() => console.log('MongoDB connected...'))
-.catch(err => console.error('MongoDB connection error:', err));
+.catch(err => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1); // Exit the process with an error code
+});
 
 // Middleware for input validation errors
 const validate = (req, res, next) => {
@@ -54,8 +47,6 @@ const validate = (req, res, next) => {
 };
 
 // Routes
-
-// Route to create an invoice
 app.post('/invoices', async (req, res, next) => {
   try {
     const invoices = await InvoiceModel.create(req.body);
@@ -65,7 +56,6 @@ app.post('/invoices', async (req, res, next) => {
   }
 });
 
-// Route to create a quotation
 app.post('/quotations', async (req, res, next) => {
   try {
     const quotation = await QuotationModel.create(req.body);
@@ -75,7 +65,6 @@ app.post('/quotations', async (req, res, next) => {
   }
 });
 
-// Route to get a quotation by ID
 app.get('/quotations/:id', async (req, res, next) => {
   try {
     const quotation = await QuotationModel.findById(req.params.id);
@@ -89,7 +78,6 @@ app.get('/quotations/:id', async (req, res, next) => {
   }
 });
 
-// Route to find invoices by email
 app.post('/invdata', [
   body('email').isEmail().normalizeEmail()
 ], validate, async (req, res, next) => {
@@ -102,7 +90,6 @@ app.post('/invdata', [
   }
 });
 
-// Route to find quotations by email
 app.post('/quotdata', [
   body('email').isEmail().normalizeEmail()
 ], validate, async (req, res, next) => {
@@ -115,7 +102,6 @@ app.post('/quotdata', [
   }
 });
 
-// Route to find user by ID
 app.get('/users/:id', async (req, res, next) => {
   try {
     const user = await UserModel.findById(req.params.id);
@@ -129,7 +115,6 @@ app.get('/users/:id', async (req, res, next) => {
   }
 });
 
-// Route to update user by ID
 app.put('/users/:id', async (req, res, next) => {
   try {
     const user = await UserModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -143,7 +128,6 @@ app.put('/users/:id', async (req, res, next) => {
   }
 });
 
-// Route to handle user registration
 app.post('/register', async (req, res, next) => {
   try {
     const register = await RegisterModel.create(req.body);
@@ -153,7 +137,6 @@ app.post('/register', async (req, res, next) => {
   }
 });
 
-// Route to handle user login
 app.post('/login', async (req, res, next) => {
   const { email, password } = req.body;
   try {
@@ -173,7 +156,6 @@ app.post('/login', async (req, res, next) => {
   }
 });
 
-// Route to check if a user exists
 app.post('/check', async (req, res, next) => {
   try {
     const user = await RegisterModel.findOne({ email: req.body.email });
