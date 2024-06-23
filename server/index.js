@@ -12,34 +12,24 @@ const RegisterModel = require('./models/Register');
 dotenv.config();
 
 const app = express();
-app.use(express.json());
+const port = process.env.PORT || 3001;
+const mongoURI = process.env.MONGO_URI;
+
+// Middleware
+app.use(express.json()); // Parse JSON request bodies
 app.use(cors({
   origin: "https://invoicerly.vercel.app",
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-  credentials: true
+  credentials: true,
 }));
 
+// CORS preflight middleware
+app.options('*', cors()); // Enable preflight requests for all routes
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://invoicerly.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(204);
-  } else {
-    next();
-  }
-});
-
-
-
-const mongoURI = process.env.MONGO_URI;
-const port = process.env.PORT || 3001;
-
+// Connect to MongoDB
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 })
 .then(() => console.log('MongoDB connected...'))
 .catch(err => console.error('MongoDB connection error:', err));
@@ -52,6 +42,8 @@ const validate = (req, res, next) => {
   }
   next();
 };
+
+// Routes
 
 // Route to create an invoice
 app.post('/invoices', async (req, res, next) => {
