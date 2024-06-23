@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 const EditUser = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+axios.defaults.withCredentials = true;
 
   const [userData, setUserData] = useState({
     name: '',
@@ -17,6 +18,7 @@ const EditUser = () => {
   });
 
   useEffect(() => {
+   
     axios.get(`https://invoicerly-server.vercel.app/users/${id}`)
       .then(response => {
         console.log('Fetched user data:', response.data); // Log the fetched data
@@ -37,6 +39,8 @@ const EditUser = () => {
 
   const handleUpdate = (e) => {
     e.preventDefault();
+   axios.defaults.withCredentials = true;
+
     console.log('Updating user with data:', userData); // Log the data being sent for update
 
     axios.put(`https://invoicerly-server.vercel.app/users/${id}`, userData, {
