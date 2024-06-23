@@ -17,6 +17,7 @@ const Home = () => {
  
  const handlecheck = async (e) => {
   e.preventDefault();
+axios.defaults.withCredentials = true;
 
   try {
     const result = await axios.post('https://invoicerly-server.vercel.app/check', { email });
