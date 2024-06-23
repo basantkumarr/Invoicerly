@@ -14,7 +14,7 @@ const Greeting = () => {
 
   useEffect(() => {
     if (email) {
-      axios.post('http://localhost:3001/check', { email })
+      axios.post('https://invoicerly-server.vercel.app/check', { email })
         .then(result => {
           setUserinfo(result.data.data);
         })
