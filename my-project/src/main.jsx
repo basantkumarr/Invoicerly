@@ -7,9 +7,10 @@ import { ClerkProvider } from '@clerk/clerk-react';
 
 const PUBLISHABLE_KEY = 'pk_test_cHJlcGFyZWQtZm94LTAuY2xlcmsuYWNjb3VudHMuZGV2JA';
 
-console.log('PUBLISHABLE_KEY:', PUBLISHABLE_KEY);
 
 if (!PUBLISHABLE_KEY) {
+  console.log('PUBLISHABLE_KEY:', PUBLISHABLE_KEY);
+
   throw new Error("Missing Publishable Key");
 }
 
