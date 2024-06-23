@@ -20,7 +20,7 @@ const Invcreate = () => {
 
   useEffect(() => {
     if (email) {
-      axios.post('http://localhost:3001/check', { email })
+      axios.post('invoicerly-server.vercel.app/check', { email })
         .then(result => {
           setUser(result.data.data);
         })
