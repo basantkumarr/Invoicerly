@@ -1,23 +1,6 @@
+
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "index.html",  
-      "use": "@vercel/static-build"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(favicon.ico|images|static)/",   
-      "headers": { "Cache-Control": "max-age=31536000, immutable" },
-      "continue": true
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "index.html"
-    }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
