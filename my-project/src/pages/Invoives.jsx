@@ -10,7 +10,7 @@ const Invoices = () => {
 
   useEffect(() => {
     if (email) {
-      axios.post('http://localhost:3001/invdata', { email })
+      axios.post('https://invoicerly-server.vercel.app/invdata', { email })
         .then(response => {
           console.log('Invoice data:', response.data);
           setInv(response.data);
