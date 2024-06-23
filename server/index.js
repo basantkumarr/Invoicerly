@@ -22,25 +22,18 @@ app.use(cors({
 
 // CORS preflight middleware
 app.options('*', cors()); // Enable preflight requests for all routes
+const mongoURI = process.env.MONGO_URI;
+const port = process.env.PORT || 3001;
+ 
 
-// Connect to MongoDB
-mongoose.connect("mongodb+srv://basantkumarweb:gVLbGoBQUdMThPdn@data.hi1kuqj.mongodb.net/?retryWrites=true&w=majority&appName=Data", {
+
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useUnifiedTopology: true
 })
-.then(() => console.log('MongoDB connected...'))
-.catch(err => {
-  console.error('MongoDB connection error:', err);
-  process.exit(1); // Exit the process with an error code
-});
+  .then(() => console.log('MongoDB connected...'))
+  .catch(err => console.log(err));
 
-// Middleware for basic input validation
-const validateEmail = (email) => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(String(email).toLowerCase());
-};
-
-// Routes
 app.post('/invoices', async (req, res, next) => {
   try {
     const invoices = await InvoiceModel.create(req.body);
@@ -50,51 +43,108 @@ app.post('/invoices', async (req, res, next) => {
   }
 });
 
-app.post('/quotations', async (req, res, next) => {
-  try {
-    const quotation = await QuotationModel.create(req.body);
-    res.json(quotation);
-  } catch (err) {
-    next(err);
+
+
+app.post('/quotation', (req,res)=>{
+    QuotationModel.create(req.body)
+    .then(quotation=> res.json(quotation))
+    .catch(err=> res.json(err))
+})
+
+
+app.get('/quotation/:id', (req,res)=>{
+  
+  QuotationModel.findById(req.params.id)
+    .then(invoice => {
+      if (invoice) {
+        res.json(invoice);
+      } else {
+        res.status(404).json({ error: "Quotation not found" });
+      }
+    })
+    .catch(err => {
+      res.json(err);
+    });
+})
+
+
+
+ 
+
+
+app.post('/invdata', (req, res) => {
+  const { email } = req.body;
+
+  // Validate that email is provided
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+    console.log("hbhjbkbj")
   }
+ 
+  InvoiceModel.find({ email: email })
+    .then(invoices =>{ res.json(invoices)
+      
+     })
+    .catch(err => res.status(400).json(err));
 });
 
-app.get('/quotations/:id', async (req, res, next) => {
+
+app.post('/quotdata', (req, res) => {
+  const { email } = req.body;
+
+  // Validate that email is provided
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+    console.log("hbhjbkbj")
+  }
+ 
+  QuotationModel.find({ email: email })
+    .then(invoices =>{ res.json(invoices)
+      
+     })
+    .catch(err => res.status(400).json(err));
+});
+
+
+
+
+app.get('/invoices/:id', async (req, res, next) => {
   try {
-    const quotation = await QuotationModel.findById(req.params.id);
-    if (quotation) {
-      res.json(quotation);
+    const invoice = await InvoiceModel.findById(req.params.id);
+    if (invoice) {
+      res.json(invoice);
     } else {
-      res.status(404).json({ error: "Quotation not found" });
+      res.status(404).json({ error: "Invoice not found" });
     }
   } catch (err) {
     next(err);
   }
 });
 
-app.post('/invdata', async (req, res, next) => {
-  const { email } = req.body;
-  if (!validateEmail(email)) {
-    return res.status(400).json({ error: "Invalid email address" });
-  }
+app.post("/register", async (req, res, next) => {
   try {
-    const invoices = await InvoiceModel.find({ email });
-    res.json(invoices);
+    const register = await RegisterModel.create(req.body);
+    res.json(register);
   } catch (err) {
     next(err);
   }
 });
 
-app.post('/quotdata', async (req, res, next) => {
-  const { email } = req.body;
-  if (!validateEmail(email)) {
-    return res.status(400).json({ error: "Invalid email address" });
-  }
+app.post("/login", async (req, res, next) => {
+  const { email, password } = req.body;
   try {
-    const quotations = await QuotationModel.find({ email });
-    res.json(quotations);
-  } catch (err) {
-    next(err);
+    const user = await RegisterModel.findOne({ email });
+    if (user) {
+      if (user.password === password) {
+        res.json("success");
+      } else {
+        res.status(400).json("Incorrect password");
+      }
+    } else {
+      res.status(404).json("User not found");
+    }
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -104,10 +154,10 @@ app.get('/users/:id', async (req, res, next) => {
     if (user) {
       res.json(user);
     } else {
-      res.status(404).json({ error: 'User not found' });
+      res.status(404).json({ message: 'User not found' });
     }
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -117,42 +167,14 @@ app.put('/users/:id', async (req, res, next) => {
     if (user) {
       res.json({ message: 'User updated successfully', user });
     } else {
-      res.status(404).json({ error: 'User not found' });
+      res.status(404).json({ message: 'User not found' });
     }
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 });
 
-app.post('/register', async (req, res, next) => {
-  try {
-    const register = await RegisterModel.create(req.body);
-    res.json(register);
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.post('/login', async (req, res, next) => {
-  const { email, password } = req.body;
-  try {
-    const user = await RegisterModel.findOne({ email });
-    if (user) {
-      // Placeholder for password verification logic
-      if (password === user.password) {
-        res.json({ status: "success", message: "Login successful" });
-      } else {
-        res.status(400).json({ error: "Incorrect password" });
-      }
-    } else {
-      res.status(404).json({ error: "User not found" });
-    }
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.post('/check', async (req, res, next) => {
+app.post("/check", async (req, res, next) => {
   try {
     const user = await RegisterModel.findOne({ email: req.body.email });
     if (user) {
@@ -160,18 +182,16 @@ app.post('/check', async (req, res, next) => {
     } else {
       res.json({ status: "fail" });
     }
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 });
 
-// Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!', details: err.message });
 });
 
-// Start server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
