@@ -48,6 +48,8 @@ const navigate=useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+   axios.defaults.withCredentials = true;
+
 
     if (!srNo || !date || !lastDate || !billedToCompanyName || !address) {
        alert("Please fill in all required fields. ");
