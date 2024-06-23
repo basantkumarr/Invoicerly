@@ -19,7 +19,7 @@ const Home = () => {
   e.preventDefault();
 
   try {
-    const result = await axios.post('http://localhost:3001/check', { email });
+    const result = await axios.post('https://invoicerly-server.vercel.app/check', { email });
 
     console.log(result);
 
