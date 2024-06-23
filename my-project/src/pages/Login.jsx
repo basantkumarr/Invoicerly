@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault();
 
     axios
-      .post("http://localhost:3001/login", {
+      .post("https://invoicerly-server.vercel.app/login", {
         email,
         password,
       })
