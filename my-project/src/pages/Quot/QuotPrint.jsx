@@ -19,7 +19,7 @@ const QuotPrint = () => {
 
   useEffect(() => {
     if (email) {
-      axios.post('http://localhost:3001/check', { email })
+      axios.post('https://invoicerly-server.vercel.app/check', { email })
         .then(result => {
           setUser(result.data.data);
         })
@@ -30,7 +30,7 @@ const QuotPrint = () => {
   }, [email]);
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/quotation/${id}`)
+    axios.get(`https://invoicerly-server.vercel.app/quotation/${id}`)
       .then(response => {
         setInvoice(response.data);
       })
