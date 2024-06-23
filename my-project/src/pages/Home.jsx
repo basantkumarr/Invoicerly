@@ -17,28 +17,34 @@ const Home = () => {
  
  const handlecheck = async (e) => {
   e.preventDefault();
-axios.defaults.withCredentials = true;
+
+  // Assuming 'axios' is properly imported or included in your project
+  axios.defaults.withCredentials = true; // Enable sending credentials (cookies)
 
   try {
-    const result = await axios.post(`https://invoicerly-server.vercel.app/check`, { email }, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": true,
-      },
-    });
+    const result = await axios.post(
+      `https://invoicerly-server.vercel.app/check`,
+      { email }, // Assuming 'email' is defined elsewhere in your code
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     console.log(result);
 
     if (result.data.status === "success") {
-      navigate("/dash");
+      navigate("/dash"); // Assuming 'navigate' function is defined for routing
     } else {
-      navigate("/signup");
+      navigate("/signup"); // Redirect to signup page if status is not success
     }
   } catch (err) {
     console.error('Error checking user:', err);
   }
 };
+
 
   return (
     <div className=' all '>
