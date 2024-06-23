@@ -24,7 +24,7 @@ const Signup = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-axios.post(`http://localhost:3001/register`,{  name,
+axios.post(`https://invoicerly-server.vercel.app/register`,{  name,
 company,
 password,
 email,
