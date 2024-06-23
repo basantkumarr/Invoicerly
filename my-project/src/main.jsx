@@ -7,16 +7,9 @@ import { ClerkProvider } from '@clerk/clerk-react';
 
 const PUBLISHABLE_KEY = 'pk_test_cHJlcGFyZWQtZm94LTAuY2xlcmsuYWNjb3VudHMuZGV2JA';
 
-
-if (!PUBLISHABLE_KEY) {
-  console.log('PUBLISHABLE_KEY:', PUBLISHABLE_KEY);
-
-  throw new Error("Missing Publishable Key");
-}
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ClerkProvider frontendApi={PUBLISHABLE_KEY}>
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
       <App />
     </ClerkProvider>
   </React.StrictMode>
