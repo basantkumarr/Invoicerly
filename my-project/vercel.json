@@ -6,7 +6,7 @@
       "use": "@vercel/static-build",
       "config": {
         "environment": {
-          "VITE_CLERK_PUBLISHABLE_KEY": "YOUR_PUBLISHABLE_KEY_HERE"
+          "VITE_CLERK_PUBLISHABLE_KEY": "pk_test_cHJlcGFyZWQtZm94LTAuY2xlcmsuYWNjb3VudHMuZGV2JA"
         }
       }
     }
