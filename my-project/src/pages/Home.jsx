@@ -8,13 +8,13 @@ import {  useNavigate}  from "react-router-dom"
 import Footer from './Footer'
 import axios from 'axios'
  import { useUser } from '@clerk/clerk-react'
- 
+
 
 const Home = () => {
  const navigate=useNavigate()
  const {user}=useUser();
  const email = user?.primaryEmailAddress?.emailAddress;
- 
+
  const handlecheck = async (e) => {
   e.preventDefault();
 
@@ -202,4 +202,4 @@ const Home = () => {
   )
 }
 
-export default Home   
+export default Home
