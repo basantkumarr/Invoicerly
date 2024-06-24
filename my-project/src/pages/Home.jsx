@@ -19,7 +19,13 @@ const Home = () => {
 axios.defaults.withCredentials = true;
 
   try {
-    const result = await axios.post(`https://invoicerly-server.vercel.app/check`, { email });
+    const result = await axios.post(`https://invoicerly-server.vercel.app/check`, { email }, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+    });
 
     console.log(result);
 
