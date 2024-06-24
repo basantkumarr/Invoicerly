@@ -14,9 +14,8 @@ const Signup = () => {
   const [accountNumber, setAccountNumber] = useState('');
   const [city, setCity] = useState('');
   const [mobile, setMobile] = useState('');
+  const [showSignInModal, setShowSignInModal] = useState(false); // State to manage modal visibility
   const navigate = useNavigate();
-
-  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -127,13 +126,17 @@ const Signup = () => {
           <button className="w-full btn btn-lg btn-dark" type="submit">
             Register
           </button>
-
-          {/* Conditional rendering for SignIn modal */}
-          {!email && (
-            <SignIn mode="modal" path="/signin" />
-          )}
         </form>
       </div>
+
+      {/* Conditional rendering for SignIn modal */}
+      {!email && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg">
+            <SignIn mode="modal" path="/signin" onSignedIn={() => setShowSignInModal(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
