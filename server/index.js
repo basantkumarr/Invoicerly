@@ -17,7 +17,7 @@ const allowedOrigins = [
   'https://invoicerly-basants-projects-54b8f0df.vercel.app'
 ];
 
-app.use(cors({
+const corsOptions = {
   origin: function (origin, callback) {
     if (!origin) return callback(null, true); // Allow non-origin requests like from Postman or curl
     if (allowedOrigins.indexOf(origin) === -1) {
@@ -32,10 +32,12 @@ app.use(cors({
   optionsSuccessStatus: 204,
   allowedHeaders: ['Content-Type', 'Authorization'],
   exposedHeaders: ['Access-Control-Allow-Origin']
-}));
+};
+
+app.use(cors(corsOptions));
 
 // Middleware to handle preflight requests for all routes
-app.options('*', cors());
+app.options('*', cors(corsOptions));
 
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3001;
