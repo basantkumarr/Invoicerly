@@ -34,10 +34,8 @@ app.use(cors({
   exposedHeaders: ['Access-Control-Allow-Origin']
 }));
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
+// Middleware to handle preflight requests for all routes
+app.options('*', cors());
 
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3001;
