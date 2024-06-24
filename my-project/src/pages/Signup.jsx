@@ -72,7 +72,7 @@ const Signup = () => {
             />
           </div>
           <div className="col-12">
-            <label htmlFor="inputAddress" className="form-label">Business logo image link</label>
+            <label htmlFor="inputAddress" className="form-label">Business logo link</label>
             <input
               type="text"
               className="form-control border-b-2"
