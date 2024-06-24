@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useUser, SignIn } from '@clerk/clerk-react';
+import { useUser, SignIn } from '@clerk/clerk-react'; // Import SignIn from Clerk
 
 const Signup = () => {
   const { user } = useUser();
@@ -14,7 +14,7 @@ const Signup = () => {
   const [accountNumber, setAccountNumber] = useState('');
   const [city, setCity] = useState('');
   const [mobile, setMobile] = useState('');
-  const [showSignInModal, setShowSignInModal] = useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false); // State to manage modal visibility
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -48,11 +48,11 @@ const Signup = () => {
       <div className='flex justify-center'>
         <form className="w-7/12" onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="inputName" className="block text-sm font-medium text-gray-700">Full Name</label>
+            <label htmlFor="inputAddress" className="block text-sm font-medium text-gray-700">Full Name</label>
             <input
               type="text"
               className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-              id="inputName"
+              id="inputAddress"
               placeholder="Ankit.."
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -81,9 +81,10 @@ const Signup = () => {
 
       {/* Conditional rendering for SignIn modal */}
       {!email && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div className="fixed   bg-gray-800 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <SignIn mode="modal" path="/signin" onSignedIn={() => setShowSignInModal(false)} />
+             
           </div>
         </div>
       )}
