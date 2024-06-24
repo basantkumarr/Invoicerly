@@ -23,8 +23,7 @@ axios.defaults.withCredentials = true;
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": true,
-      },
+       },
     });
 
     console.log(result);
