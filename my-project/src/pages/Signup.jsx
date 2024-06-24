@@ -132,10 +132,7 @@ mobile,}, {
           <button className="w-full btn btn-lg btn-dark" type="submit">
             Register
           </button>
-          <hr className="my-4" />
-          <small className="text-body-secondary text-lg font-bold">
-            Already Registered? <Link to="/login" className="underline">Login</Link>
-          </small>
+         
         </form>
       </div>
     </div>
