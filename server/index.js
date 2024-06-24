@@ -18,6 +18,7 @@ app.use(express.json());
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
   credentials: true,
   preflightContinue: false,
+    allowedHeaders: ['Content-Type', 'Authorization'],  
 }));
 
 const mongoURI = process.env.MONGO_URI;
