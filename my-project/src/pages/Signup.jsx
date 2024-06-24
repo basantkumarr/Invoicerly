@@ -1,50 +1,50 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useUser } from '@clerk/clerk-react'
-
+import { useUser, SignedOut, SignIn } from '@clerk/clerk-react'; // Import Clerk components
 
 const Signup = () => {
-
-  const {user}=useUser();
- const email = user?.primaryEmailAddress?.emailAddress;
+  const { user } = useUser();
+  const email = user?.primaryEmailAddress?.emailAddress;
   const [name, setName] = useState('');
   const [company, setCompany] = useState('');
   const [password, setPassword] = useState('');
-   const [logo, setLogo] = useState('');
+  const [logo, setLogo] = useState('');
   const [address, setAddress] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [city, setCity] = useState('');
   const [mobile, setMobile] = useState('');
-  const navigate=useNavigate();
-
-
-
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-axios.post(https://invoicerly-server.vercel.app/register,{  name,
-company,
-password,
-email,
-logo,
-address,
-accountNumber,
-city,
-mobile,}, {
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Credentials": true,
-  },
-}).then((res)=>{
-  console.log(res);
- navigate('/')
-})
+    axios.post(`https://invoicerly-server.vercel.app/register`, {
+      name,
+      company,
+      password,
+      email,
+      logo,
+      address,
+      accountNumber,
+      city,
+      mobile,
+    }, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+    }).then((res) => {
+      console.log(res);
+      navigate('/');
+    })
+  };
 
-
-  
+  // Function to handle modal visibility
+  const handleModalClose = () => {
+    setShowModal(false);
   };
 
   return (
@@ -132,11 +132,39 @@ mobile,}, {
           <button className="w-full btn btn-lg btn-dark" type="submit">
             Register
           </button>
-         
+
+          {/* Conditional rendering for sign-in modal */}
+          {email ? (
+            <SignedOut>
+              <div>
+                <p>If you already have an account, please sign in:</p>
+                {/* SignIn component to render the sign-in modal */}
+                <SignIn />
+              </div>
+            </SignedOut>
+          ) : (
+            <div className={`modal ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog">
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Sign In Required</h5>
+                    <button type="button" className="close" onClick={handleModalClose}>
+                      <span>&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <p>You need to sign in to complete the registration.</p>
+                    {/* SignIn component to render the sign-in modal */}
+                    <SignIn />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </form>
       </div>
     </div>
   );
 };
 
-export default Signup; 
+export default Signup;
