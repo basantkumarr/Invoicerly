@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useUser, SignedIn, SignedOut, SignInButton } from '@clerk/clerk-react'; // Import Clerk components
+import { useUser, SignIn } from '@clerk/clerk-react'; // Import SignIn from Clerk
 
 const Signup = () => {
   const { user } = useUser();
@@ -70,7 +70,7 @@ const Signup = () => {
             />
           </div>
           <div className="col-12">
-            <label htmlFor="inputAddress" className="form-label">Business logo link</label>
+            <label htmlFor="inputAddress" className="form-label">Business logo image link</label>
             <input
               type="text"
               className="form-control border-b-2"
@@ -126,16 +126,9 @@ const Signup = () => {
             Register
           </button>
 
-          {/* Conditional rendering for SignInButton based on user's email */}
-          {email ? (
-            <SignedIn>
-              {/* Render nothing when user is signed in */}
-            </SignedIn>
-          ) : (
-            <SignedOut>
-              {/* Render SignInButton when user is signed out */}
-              <SignInButton mode="modal" redirectUrl="/dash" />
-            </SignedOut>
+          {/* Conditional rendering for SignIn modal */}
+          {!email && (
+            <SignIn mode="modal" path="/signin" />
           )}
         </form>
       </div>
