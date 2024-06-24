@@ -15,7 +15,6 @@ const Signup = () => {
   const [city, setCity] = useState('');
   const [mobile, setMobile] = useState('');
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -39,12 +38,7 @@ const Signup = () => {
     }).then((res) => {
       console.log(res);
       navigate('/');
-    })
-  };
-
-  // Function to handle modal visibility
-  const handleModalClose = () => {
-    setShowModal(false);
+    });
   };
 
   return (
@@ -63,8 +57,7 @@ const Signup = () => {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-         
-       
+
           <div className="col-12">
             <label htmlFor="inputAddress" className="form-label">Business/Company Name</label>
             <input
@@ -133,26 +126,17 @@ const Signup = () => {
             Register
           </button>
 
-          {/* Conditional rendering for sign-in button or modal */}
-          <SignedOut>
-            <div className={`modal ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog">
-              <div className="modal-dialog" role="document">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title">Sign In Required</h5>
-                    <button type="button" className="close" onClick={handleModalClose}>
-                      <span>&times;</span>
-                    </button>
-                  </div>
-                  <div className="modal-body">
-                    <p>You need to sign in to complete the registration.</p>
-                    {/* SignInButton to trigger sign-in modal */}
-                    <SignInButton mode="modal" redirectUrl="/dash" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </SignedOut>
+          {/* Conditional rendering for SignInButton based on user's email */}
+          {email ? (
+            <SignedIn>
+              {/* Render nothing when user is signed in */}
+            </SignedIn>
+          ) : (
+            <SignedOut>
+              {/* Render SignInButton when user is signed out */}
+              <SignInButton mode="modal" redirectUrl="/dash" />
+            </SignedOut>
+          )}
         </form>
       </div>
     </div>
