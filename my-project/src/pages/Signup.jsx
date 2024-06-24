@@ -44,7 +44,7 @@ const Signup = () => {
 
   return (
     <div className='flex flex-col items-center bg-white justify-center pt-4'>
-      <h1 className="text-5xl font-semibold text-slate-800 underline mb-4">Register / Login</h1>
+      <h1 className="text-5xl font-semibold text-slate-800 underline mb-4">Register</h1>
       <div className='flex justify-center'>
         <form className="row w-7/12 g-3" onSubmit={handleSubmit}>
           <div className="col-12">
