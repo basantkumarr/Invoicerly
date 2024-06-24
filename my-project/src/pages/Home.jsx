@@ -1,42 +1,43 @@
-import React from 'react'
-import main from "../assets/invoice-header (1).png"
-import main2 from "../assets/main2.webp"
-import main3 from "../assets/main3.webp"
-import main4 from "../assets/mian4.webp"
-import Feature from '../components/Feature'
-import {  useNavigate}  from "react-router-dom"
-import Footer from './Footer'
-import axios from 'axios'
- import { useUser } from '@clerk/clerk-react'
- 
+import React from 'react';
+import main from "../assets/invoice-header (1).png";
+import main2 from "../assets/main2.webp";
+import main3 from "../assets/main3.webp";
+import main4 from "../assets/mian4.webp";
+import Feature from '../components/Feature';
+import { useNavigate } from "react-router-dom";
+import Footer from './Footer';
+import axios from 'axios';
+import { useUser } from '@clerk/clerk-react';
+
 const Home = () => {
- const navigate=useNavigate()
- const {user}=useUser();
- const email = user?.primaryEmailAddress?.emailAddress;
- 
- const handlecheck = async (e) => {
-  e.preventDefault();
-axios.defaults.withCredentials = true;
+  const navigate = useNavigate();
+  const { user } = useUser();
+  const email = user?.primaryEmailAddress?.emailAddress;
 
-  try {
-    const result = await axios.post(`https://invoicerly-server.vercel.app/check`, { email }, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-       },
-    });
+  const handlecheck = async (e) => {
+    e.preventDefault();
+    axios.defaults.withCredentials = true;
 
-    console.log(result);
+    try {
+      const result = await axios.post('https://invoicerly-server.vercel.app/check', { email }, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
 
-    if (result.data.status === "success") {
-      navigate("/dash");
-    } else {
-      navigate("/signup");
+      console.log(result);
+
+      if (result.data.status === "success") {
+        navigate("/dash");
+      } else {
+        navigate("/signup");
+      }
+    } catch (err) {
+      console.error('Error checking user:', err);
     }
-  } catch (err) {
-    console.error('Error checking user:', err);
-  }
-};
+  };
   return (
     <div className=' all '>
           <div className="container col-xxl-8 px-4  ">
