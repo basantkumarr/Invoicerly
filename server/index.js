@@ -30,8 +30,8 @@ const corsOptions = {
   credentials: true,
   preflightContinue: true,
   optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['Access-Control-Allow-Origin']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Access-Control-Allow-Credentials'],
+  exposedHeaders: ['Access-Control-Allow-Origin', 'Access-Control-Allow-Credentials']
 };
 
 app.use(cors(corsOptions));
@@ -42,7 +42,7 @@ app.options('*', cors(corsOptions));
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3001;
 
-mongoose.connect("mongodb+srv://basantkumarweb:gVLbGoBQUdMThPdn@data.hi1kuqj.mongodb.net/?retryWrites=true&w=majority&appName=Data", {
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
