@@ -1,44 +1,50 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useUser, SignedOut, SignIn } from '@clerk/clerk-react'; // Import Clerk components
+import { useUser } from '@clerk/clerk-react'
+
 
 const Signup = () => {
-  const { user } = useUser();
-  const email = user?.primaryEmailAddress?.emailAddress;
+
+  const {user}=useUser();
+ const email = user?.primaryEmailAddress?.emailAddress;
   const [name, setName] = useState('');
   const [company, setCompany] = useState('');
   const [password, setPassword] = useState('');
-  const [logo, setLogo] = useState('');
+   const [logo, setLogo] = useState('');
   const [address, setAddress] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [city, setCity] = useState('');
   const [mobile, setMobile] = useState('');
-  const navigate = useNavigate();
+  const navigate=useNavigate();
+
+
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    axios.post(`https://invoicerly-server.vercel.app/register`, {
-      name,
-      company,
-      password,
-      email,
-      logo,
-      address,
-      accountNumber,
-      city,
-      mobile,
-    }, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": true,
-      },
-    }).then((res) => {
-      console.log(res);
-      navigate('/');
-    })
+axios.post(https://invoicerly-server.vercel.app/register,{  name,
+company,
+password,
+email,
+logo,
+address,
+accountNumber,
+city,
+mobile,}, {
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Credentials": true,
+  },
+}).then((res)=>{
+  console.log(res);
+ navigate('/')
+})
+
+
+  
   };
 
   return (
@@ -126,19 +132,11 @@ const Signup = () => {
           <button className="w-full btn btn-lg btn-dark" type="submit">
             Register
           </button>
-
-          {/* SignedOut component from Clerk to handle sign-in */}
-          <SignedOut>
-            <div>
-              <p>If you already have an account, please sign in:</p>
-              {/* SignIn component to render the sign-in modal */}
-              <SignIn />
-            </div>
-          </SignedOut>
+         
         </form>
       </div>
     </div>
   );
 };
 
-export default Signup;
+export default Signup; 
