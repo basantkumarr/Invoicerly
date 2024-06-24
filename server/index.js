@@ -9,30 +9,41 @@ const RegisterModel = require('./models/Register');
 
 dotenv.config();
 
-
 const app = express();
 app.use(express.json());
- app.use(cors({
-  origin: "https://invoicerly.vercel.app",
-  optionsSuccessStatus: 200,
+
+const allowedOrigins = [
+  'https://invoicerly.vercel.app',
+  'https://invoicerly-basants-projects-54b8f0df.vercel.app'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // Allow non-origin requests like from Postman or curl
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
   credentials: true,
   preflightContinue: false,
-    allowedHeaders: ['Content-Type', 'Authorization'],  
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3001;
- 
 
-
-mongoose.connect("mongodb+srv://basantkumarweb:gVLbGoBQUdMThPdn@data.hi1kuqj.mongodb.net/?retryWrites=true&w=majority&appName=Data", {
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err));
 
+// Define your routes
 app.post('/invoices', async (req, res, next) => {
   try {
     const invoices = await InvoiceModel.create(req.body);
@@ -42,17 +53,13 @@ app.post('/invoices', async (req, res, next) => {
   }
 });
 
+app.post('/quotation', (req, res) => {
+  QuotationModel.create(req.body)
+    .then(quotation => res.json(quotation))
+    .catch(err => res.json(err));
+});
 
-
-app.post('/quotation', (req,res)=>{
-    QuotationModel.create(req.body)
-    .then(quotation=> res.json(quotation))
-    .catch(err=> res.json(err))
-})
-
-
-app.get('/quotation/:id', (req,res)=>{
-  
+app.get('/quotation/:id', (req, res) => {
   QuotationModel.findById(req.params.id)
     .then(invoice => {
       if (invoice) {
@@ -64,48 +71,27 @@ app.get('/quotation/:id', (req,res)=>{
     .catch(err => {
       res.json(err);
     });
-})
-
-
-
- 
-
+});
 
 app.post('/invdata', (req, res) => {
   const { email } = req.body;
-
-  // Validate that email is provided
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
-    console.log("hbhjbkbj")
   }
- 
   InvoiceModel.find({ email: email })
-    .then(invoices =>{ res.json(invoices)
-      
-     })
+    .then(invoices => res.json(invoices))
     .catch(err => res.status(400).json(err));
 });
-
 
 app.post('/quotdata', (req, res) => {
   const { email } = req.body;
-
-  // Validate that email is provided
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
-    console.log("hbhjbkbj")
   }
- 
   QuotationModel.find({ email: email })
-    .then(invoices =>{ res.json(invoices)
-      
-     })
+    .then(invoices => res.json(invoices))
     .catch(err => res.status(400).json(err));
 });
-
-
-
 
 app.get('/invoices/:id', async (req, res, next) => {
   try {
@@ -192,5 +178,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => {
-  console.log(Server is running on port ${port});
-});  
+  console.log(`Server is running on port ${port}`);
+});
