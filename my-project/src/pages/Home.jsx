@@ -1,50 +1,37 @@
-import React from 'react'
-import main from "../assets/invoice-header (1).png"
-import main2 from "../assets/main2.webp"
-import main3 from "../assets/main3.webp"
-import main4 from "../assets/mian4.webp"
-import Feature from '../components/Feature'
-import {  useNavigate}  from "react-router-dom"
-import Footer from './Footer'
-import axios from 'axios'
- import { useUser } from '@clerk/clerk-react'
-
+import React, { useState } from 'react';
+import main from "../assets/invoice-header (1).png";
+import main2 from "../assets/main2.webp";
+import main3 from "../assets/main3.webp";
+import main4 from "../assets/mian4.webp";
+import Feature from '../components/Feature';
+import { useNavigate } from "react-router-dom";
+import Footer from './Footer';
+import axios from 'axios';
+import { useUser, SignIn } from '@clerk/clerk-react';
 
 const Home = () => {
- const navigate=useNavigate()
- const {user}=useUser();
- const email = user?.primaryEmailAddress?.emailAddress;
+  const navigate = useNavigate();
+  const { user } = useUser();
+  const email = user?.primaryEmailAddress?.emailAddress;
+  const [showSignInModal, setShowSignInModal] = useState(false);
 
  const handlecheck = async (e) => {
   e.preventDefault();
 
-  // Assuming 'axios' is properly imported or included in your project
-  axios.defaults.withCredentials = true; // Enable sending credentials (cookies)
-
   try {
-    const result = await axios.post(
-      `https://invoicerly-server.vercel.app/check`,
-      { email }, // Assuming 'email' is defined elsewhere in your code
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const result = await axios.post('https://invoicerly-server.vercel.app/check', { email });
 
     console.log(result);
 
     if (result.data.status === "success") {
-      navigate("/dash"); // Assuming 'navigate' function is defined for routing
+      navigate("/dash");
     } else {
-      navigate("/signup"); // Redirect to signup page if status is not success
+      navigate("/signup");
     }
   } catch (err) {
     console.error('Error checking user:', err);
   }
 };
-
 
   return (
     <div className=' all '>
