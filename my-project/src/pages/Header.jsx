@@ -30,7 +30,7 @@ const Header = () => {
             aria-labelledby="offcanvasNavbar2Label"
           >
             <div className="offcanvas-header">
-              <h5 className="offcanvas-title" id="offcanvasNavbar2Label">Offcanvas</h5>
+              <h5 className="offcanvas-title" id="offcanvasNavbar2Label">InVoicerly</h5>
               <button
                 type="button"
                 className="btn-close btn-close-white"
@@ -62,7 +62,7 @@ const Header = () => {
                   </ul>
                 </li>
               </ul>
-              <div className="d-flex mt-3 mt-lg-0">
+              <div className="d-flex mt-3 justify-center mt-lg-0">
                  <SignedIn>
                   <UserButton />
                 </SignedIn>
