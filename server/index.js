@@ -9,19 +9,11 @@ const RegisterModel = require('./models/Register');
 
 dotenv.config();
 
-const app = express();
-const port = process.env.PORT || 3001;
-const mongoURI = process.env.MONGO_URI;
- // Middleware
-app.use(express.json()); // Parse JSON request bodies
-app.use(cors({
-  origin: "https://invoicerly.vercel.app",
-  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-  credentials: true,
-}));
 
-// CORS preflight middleware
-app.options('*', cors()); // Enable preflight requests for all routes
+const app = express();
+app.use(express.json());
+app.use(cors());
+
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3001;
  
