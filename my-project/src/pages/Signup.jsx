@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useUser, SignedOut, SignIn } from '@clerk/clerk-react'; // Import Clerk components
+import { useUser, SignedIn, SignedOut, SignInButton } from '@clerk/clerk-react'; // Import Clerk components
 
 const Signup = () => {
   const { user } = useUser();
@@ -133,16 +133,8 @@ const Signup = () => {
             Register
           </button>
 
-          {/* Conditional rendering for sign-in modal */}
-          {email ? (
-            <SignedOut>
-              <div>
-                <p>If you already have an account, please sign in:</p>
-                {/* SignIn component to render the sign-in modal */}
-                <SignIn />
-              </div>
-            </SignedOut>
-          ) : (
+          {/* Conditional rendering for sign-in button or modal */}
+          <SignedOut>
             <div className={`modal ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog">
               <div className="modal-dialog" role="document">
                 <div className="modal-content">
@@ -154,13 +146,13 @@ const Signup = () => {
                   </div>
                   <div className="modal-body">
                     <p>You need to sign in to complete the registration.</p>
-                    {/* SignIn component to render the sign-in modal */}
-                    <SignIn />
+                    {/* SignInButton to trigger sign-in modal */}
+                    <SignInButton mode="modal" redirectUrl="/dash" />
                   </div>
                 </div>
               </div>
             </div>
-          )}
+          </SignedOut>
         </form>
       </div>
     </div>
