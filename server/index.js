@@ -9,34 +9,24 @@ const RegisterModel = require('./models/Register');
 
 dotenv.config();
 
+
 const app = express();
 app.use(express.json());
-
-const allowedOrigins = [
-  'https://invoicerly.vercel.app',
-  'https://invoicerly-basants-projects-54b8f0df.vercel.app'
-];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
+ app.use(cors({
+  origin: "https://invoicerly.vercel.app",
   optionsSuccessStatus: 200,
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
   credentials: true,
   preflightContinue: false,
-  allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization'],  
 }));
 
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3001;
+ 
 
-mongoose.connect(mongoURI, {
+
+mongoose.connect("mongodb+srv://basantkumarweb:gVLbGoBQUdMThPdn@data.hi1kuqj.mongodb.net/?retryWrites=true&w=majority&appName=Data", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -52,43 +42,70 @@ app.post('/invoices', async (req, res, next) => {
   }
 });
 
-app.post('/quotation', (req, res) => {
-  QuotationModel.create(req.body)
-    .then(quotation => res.json(quotation))
-    .catch(err => res.json(err));
-});
 
-app.get('/quotation/:id', (req, res) => {
+
+app.post('/quotation', (req,res)=>{
+    QuotationModel.create(req.body)
+    .then(quotation=> res.json(quotation))
+    .catch(err=> res.json(err))
+})
+
+
+app.get('/quotation/:id', (req,res)=>{
+  
   QuotationModel.findById(req.params.id)
-    .then(quotation => {
-      if (quotation) {
-        res.json(quotation);
+    .then(invoice => {
+      if (invoice) {
+        res.json(invoice);
       } else {
         res.status(404).json({ error: "Quotation not found" });
       }
     })
-    .catch(err => res.json(err));
-});
+    .catch(err => {
+      res.json(err);
+    });
+})
+
+
+
+ 
+
 
 app.post('/invdata', (req, res) => {
   const { email } = req.body;
+
+  // Validate that email is provided
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
+    console.log("hbhjbkbj")
   }
+ 
   InvoiceModel.find({ email: email })
-    .then(invoices => res.json(invoices))
+    .then(invoices =>{ res.json(invoices)
+      
+     })
     .catch(err => res.status(400).json(err));
 });
 
+
 app.post('/quotdata', (req, res) => {
   const { email } = req.body;
+
+  // Validate that email is provided
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
+    console.log("hbhjbkbj")
   }
+ 
   QuotationModel.find({ email: email })
-    .then(quotations => res.json(quotations))
+    .then(invoices =>{ res.json(invoices)
+      
+     })
     .catch(err => res.status(400).json(err));
 });
+
+
+
 
 app.get('/invoices/:id', async (req, res, next) => {
   try {
@@ -175,6 +192,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
-
+  console.log(Server is running on port ${port});
+});  
