@@ -23,7 +23,7 @@ const Home = () => {
 
   try {
     const result = await axios.post(
-      https://invoicerly-server.vercel.app/check,
+      `https://invoicerly-server.vercel.app/check`,
       { email }, // Assuming 'email' is defined elsewhere in your code
       {
         headers: {
