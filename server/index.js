@@ -31,7 +31,13 @@ app.use(cors({
   preflightContinue: false,
   optionsSuccessStatus: 204,
   allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Access-Control-Allow-Origin']
 }));
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3001;
