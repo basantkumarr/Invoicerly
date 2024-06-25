@@ -12,8 +12,6 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-
-
 const allowedOrigins = [
   'https://invoicerly.vercel.app',
   'https://invoicerly-basants-projects-54b8f0df.vercel.app'
@@ -30,9 +28,8 @@ const corsOptions = {
   },
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
   credentials: true,
-  optionsSuccessStatus: 204,
   allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['Access-Control-Allow-Origin']
+  optionsSuccessStatus: 204
 };
 
 app.use(cors(corsOptions));
