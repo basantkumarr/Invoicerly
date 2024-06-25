@@ -40,7 +40,7 @@ app.options('*', cors(corsOptions));
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3001;
 
-mongoose.connect(mongoURI, {
+mongoose.connect("mongodb+srv://basantkumarweb:gVLbGoBQUdMThPdn@data.hi1kuqj.mongodb.net/?retryWrites=true&w=majority&appName=Data", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
