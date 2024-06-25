@@ -21,8 +21,7 @@ const Home = () => {
     try {
       const result = await axios.post('https://invoicerly-server.vercel.app/check', { email }, {
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+           "Content-Type": "application/json",
         },
         withCredentials: true,
       });
