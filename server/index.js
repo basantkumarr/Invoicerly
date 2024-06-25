@@ -13,6 +13,7 @@ const app = express();
 app.use(express.json());
 
 
+
 const allowedOrigins = [
   'https://invoicerly.vercel.app',
   'https://invoicerly-basants-projects-54b8f0df.vercel.app'
