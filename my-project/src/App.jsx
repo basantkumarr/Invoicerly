@@ -54,7 +54,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/signup" element={checkAccess(Signup)}  />
         <Route path="/login" element={<Login />} />
         <Route 
           path="/dash" 
