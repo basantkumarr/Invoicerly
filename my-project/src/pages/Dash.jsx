@@ -79,7 +79,7 @@ Create Invoice                </button> </Link>
               <div className="card-body">
                  
                 <ul className="list-unstyled mt-3 mb-4">
-                  <li>Create your invoice</li>
+                  <li>Create your greeting</li>
                   <li>Send Directly</li>
                   <li>Phone and email support</li>
                   <li>Help center access</li>
