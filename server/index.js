@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
+
 const InvoiceModel = require('./models/Invoice');
 const QuotationModel = require('./models/Quotation');
 const UserModel = require('./models/User');
@@ -12,12 +13,13 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// Allowed Origins for CORS
+// ✅ Allowed Origins
 const allowedOrigins = [
   'https://invoicerly.vercel.app',
   'https://invoicerly-basants-projects-54b8f0df.vercel.app'
 ];
 
+// ✅ Proper CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -26,19 +28,20 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"]
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // ✅ Preflight for all routes
 
-// Explicitly handle preflight requests with full CORS options
-app.options('*', cors(corsOptions));
-
-// Debug Middleware (Optional - for troubleshooting)
+// ✅ Optional: fallback CORS headers (just in case)
 app.use((req, res, next) => {
-  console.log(`🔍 [${req.method}] ${req.path} from ${req.headers.origin}`);
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
 
@@ -48,15 +51,17 @@ const port = process.env.PORT || 3001;
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}).then(() => console.log('✅ MongoDB connected'))
-  .catch(err => console.error('❌ MongoDB Connection Error:', err));
+})
+.then(() => console.log('MongoDB connected...'))
+.catch(err => console.error('MongoDB Connection Error:', err));
 
+// ✅ Helper error handler
 const handleError = (res, error, message = "Something went wrong!") => {
   console.error(error);
   res.status(500).json({ error: message, details: error.message });
 };
 
-// ========== Routes ==========
+// 🔹 Routes
 
 // Create Invoice
 app.post('/invoices', async (req, res) => {
@@ -88,7 +93,7 @@ app.get('/quotation/:id', async (req, res) => {
   }
 });
 
-// Get Invoice by Email
+// Get Invoices by Email
 app.post('/invdata', async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: 'Email is required' });
@@ -101,7 +106,7 @@ app.post('/invdata', async (req, res) => {
   }
 });
 
-// Get Quotation by Email
+// Get Quotations by Email
 app.post('/quotdata', async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: 'Email is required' });
@@ -124,10 +129,11 @@ app.get('/invoices/:id', async (req, res) => {
   }
 });
 
-// User Registration
-app.post("/register", async (req, res) => {
+// Register user with hashed password
+app.post('/register', async (req, res) => {
   try {
     const { email, password } = req.body;
+
     const existingUser = await RegisterModel.findOne({ email });
     if (existingUser) return res.status(400).json({ error: "User already exists" });
 
@@ -140,11 +146,12 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// User Login
-app.post("/login", async (req, res) => {
+// Login user
+app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await RegisterModel.findOne({ email });
+
     if (!user) return res.status(404).json({ error: "User not found" });
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -166,7 +173,7 @@ app.get('/users/:id', async (req, res) => {
   }
 });
 
-// Update User
+// Update user
 app.put('/users/:id', async (req, res) => {
   try {
     const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -176,8 +183,8 @@ app.put('/users/:id', async (req, res) => {
   }
 });
 
-// Check User by Email
-app.post("/check", async (req, res) => {
+// Check user by email
+app.post('/check', async (req, res) => {
   try {
     const user = await RegisterModel.findOne({ email: req.body.email });
     user ? res.json({ status: "success", data: user }) : res.json({ status: "fail" });
@@ -186,9 +193,10 @@ app.post("/check", async (req, res) => {
   }
 });
 
-// Global Error Handler
+// Global error fallback
 app.use((err, req, res, next) => handleError(res, err));
 
+// Start server
 app.listen(port, () => {
   console.log(`🚀 Server is running on port ${port}`);
 });
