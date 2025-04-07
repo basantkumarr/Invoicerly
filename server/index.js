@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const bcrypt = require('bcrypt'); // Secure password hashing
+const bcrypt = require('bcrypt');
 const InvoiceModel = require('./models/Invoice');
 const QuotationModel = require('./models/Quotation');
 const UserModel = require('./models/User');
@@ -18,15 +18,29 @@ const allowedOrigins = [
   'https://invoicerly-basants-projects-54b8f0df.vercel.app'
 ];
 
-app.use(cors({
-  origin: allowedOrigins,
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"]
-}));
+};
 
-// Handle preflight requests
-app.options('*', cors());
+app.use(cors(corsOptions));
+
+// Explicitly handle preflight requests with full CORS options
+app.options('*', cors(corsOptions));
+
+// Debug Middleware (Optional - for troubleshooting)
+app.use((req, res, next) => {
+  console.log(`🔍 [${req.method}] ${req.path} from ${req.headers.origin}`);
+  next();
+});
 
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3001;
@@ -34,16 +48,15 @@ const port = process.env.PORT || 3001;
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}).then(() => console.log('MongoDB connected...'))
-  .catch(err => console.error('MongoDB Connection Error:', err));
+}).then(() => console.log('✅ MongoDB connected'))
+  .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
-// 🌟 Helper function for error handling
 const handleError = (res, error, message = "Something went wrong!") => {
   console.error(error);
   res.status(500).json({ error: message, details: error.message });
 };
 
-// 🔹 Routes
+// ========== Routes ==========
 
 // Create Invoice
 app.post('/invoices', async (req, res) => {
@@ -69,11 +82,7 @@ app.post('/quotation', async (req, res) => {
 app.get('/quotation/:id', async (req, res) => {
   try {
     const quotation = await QuotationModel.findById(req.params.id);
-    if (quotation) {
-      res.json(quotation);
-    } else {
-      res.status(404).json({ error: "Quotation not found" });
-    }
+    quotation ? res.json(quotation) : res.status(404).json({ error: "Quotation not found" });
   } catch (error) {
     handleError(res, error);
   }
@@ -115,16 +124,13 @@ app.get('/invoices/:id', async (req, res) => {
   }
 });
 
-// User Registration (Hash Password)
+// User Registration
 app.post("/register", async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // Check if user already exists
     const existingUser = await RegisterModel.findOne({ email });
     if (existingUser) return res.status(400).json({ error: "User already exists" });
 
-    // Hash password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await RegisterModel.create({ email, password: hashedPassword });
 
@@ -139,10 +145,8 @@ app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await RegisterModel.findOne({ email });
-
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    // Compare hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: "Incorrect password" });
 
